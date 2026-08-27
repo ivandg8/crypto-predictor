@@ -105,6 +105,70 @@
       <p class="warning">⚠️ Estos indicadores se muestran como capa de confirmación. Primero los vamos a validar con backtest para evitar ajustar el modelo a datos pasados.</p>`;
   }
 
+  function drawBinanceScale() {
+    const c = document.getElementById('chart');
+    if (!c || !Array.isArray(candles) || !candles.length) return;
+    const ctx = c.getContext('2d');
+    const d = window.devicePixelRatio || 1;
+    const w = c.width, h = c.height;
+    const a = candles.slice(-60);
+    if (!a.length) return;
+    const min = Math.min(...a.map(x => x.l));
+    const max = Math.max(...a.map(x => x.h));
+    const pad = 25 * d;
+    const plotH = h - pad * 2;
+    const y = v => h - pad - (v - min) / (max - min || 1) * plotH;
+    const right = 86 * d;
+    const labelX = w - 7 * d;
+    ctx.save();
+    ctx.font = `${12 * d}px system-ui, sans-serif`;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.strokeStyle = 'rgba(130,145,175,.18)';
+    ctx.fillStyle = '#8997b3';
+    ctx.lineWidth = 1 * d;
+    const steps = 6;
+    for (let i = 0; i <= steps; i++) {
+      const value = max - (max - min) * i / steps;
+      const yy = y(value);
+      ctx.beginPath();
+      ctx.moveTo(0, yy);
+      ctx.lineTo(w - right, yy);
+      ctx.stroke();
+      ctx.fillText(fmtA(value), labelX, yy);
+    }
+    const current = Number(candles.at(-1).c);
+    if (Number.isFinite(current)) {
+      const yy = y(current);
+      ctx.strokeStyle = '#f0b90b';
+      ctx.setLineDash([5 * d, 4 * d]);
+      ctx.beginPath();
+      ctx.moveTo(0, yy);
+      ctx.lineTo(w - right, yy);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      const text = fmtA(current);
+      const tw = ctx.measureText(text).width + 14 * d;
+      const x0 = w - tw;
+      ctx.fillStyle = '#f0b90b';
+      ctx.fillRect(x0, yy - 10 * d, tw, 20 * d);
+      ctx.fillStyle = '#0b1020';
+      ctx.fillText(text, w - 7 * d, yy);
+    }
+    ctx.restore();
+  }
+
+  const baseDraw = window.draw;
+  if (typeof baseDraw === 'function') {
+    window.draw = function() {
+      baseDraw();
+      drawBinanceScale();
+    };
+    setTimeout(() => {
+      if (typeof window.draw === 'function') window.draw();
+    }, 1300);
+  }
+
   setTimeout(updateAdvanced, 1200);
   setInterval(updateAdvanced, 10000);
 })();
