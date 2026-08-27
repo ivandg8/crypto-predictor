@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="es">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Crypto Predictor</title><link rel="stylesheet" href="style.css"></head>
-<body>
+<body id="top">
 <header><div><h1>Crypto Predictor</h1><p>Análisis experimental de velas de 1 minuto</p></div><span id="status" class="status">Conectando…</span></header>
 <main>
-<section class="toolbar"><label>Criptomoneda<select id="symbol"><option>BTCUSDT</option><option>ETHUSDT</option><option>BNBUSDT</option><option>SOLUSDT</option><option>XRPUSDT</option><option>DOGEUSDT</option><option>ADAUSDT</option><option>AVAXUSDT</option></select></label><button id="refresh">Actualizar</button><a class="button-link" href="#backtest">📊 Abrir Backtest histórico</a></section>
+<section class="toolbar"><label>Criptomoneda<select id="symbol"><option>BTCUSDT</option><option>ETHUSDT</option><option>BNBUSDT</option><option>SOLUSDT</option><option>XRPUSDT</option><option>DOGEUSDT</option><option>ADAUSDT</option><option>AVAXUSDT</option></select></label><button id="refresh">Actualizar</button></section>
+<a class="backtest-cta" href="#backtest">📊 PROBAR BACKTEST HISTÓRICO</a>
 <section class="panel"><h2>Fuente de datos</h2><p id="dataInfo">Binance · velas de 1 minuto · esperando datos…</p></section>
 <section class="grid cards"><article><span>Precio actual</span><b id="price">—</b><small id="change">—</small></article><article><span>Próximo minuto</span><b id="signal">—</b><small id="confidence">Esperando datos…</small></article><article><span>Última vela cerrada</span><b id="candle">—</b><small id="volume">Volumen: —</small></article></section>
 <section class="grid indicators"><article><span>RSI (14)</span><b id="rsi">—</b><small>Momentum relativo</small></article><article><span>EMA (9)</span><b id="ema9">—</b><small>Tendencia corta</small></article><article><span>EMA (21)</span><b id="ema21">—</b><small>Tendencia media</small></article><article><span>Volatilidad</span><b id="volatility">—</b><small>Desv. retornos 20m</small></article></section>
